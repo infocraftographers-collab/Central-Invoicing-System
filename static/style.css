@@ -1,0 +1,1354 @@
+/* ==========================================================================
+   CENTRAL INVOICING & GST RECORD SYSTEM
+   THEME: BLUE & WHITE EXECUTIVE SAAS PALETTE + HIGH-END A4 INVOICE GRADES
+   ========================================================================== */
+
+:root {
+  /* Blue & White UI Color Palette */
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-800: #1e40af;
+  --blue-900: #1e3a8a;
+  --blue-950: #0f172a;
+
+  --primary: var(--blue-600);
+  --primary-hover: var(--blue-700);
+  --primary-subtle: var(--blue-50);
+  --primary-border: var(--blue-200);
+
+  --bg-app: #f1f5f9;
+  --card-bg: #ffffff;
+  --text-dark: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --border-light: #e2e8f0;
+  --border-focus: #3b82f6;
+
+  /* Firm Color Grades for Invoice & Switcher */
+  --crafto-primary: #b45309;       /* Warm Terracotta / Bronze */
+  --crafto-dark: #78350f;
+  --crafto-light: #fef3c7;
+  --crafto-subtle: #fffbeb;
+  --crafto-border: #fcd34d;
+
+  --as-primary: #1e3a8a;           /* Royal Navy / Sapphire */
+  --as-dark: #0f172a;
+  --as-light: #dbeafe;
+  --as-subtle: #f8fafc;
+  --as-border: #93c5fd;
+
+  --success: #10b981;
+  --danger: #ef4444;
+  --whatsapp: #22c55e;
+  --gmail: #ea4335;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.06);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   TOP BLUE & WHITE NAVBAR
+   ========================================================================== */
+.top-navbar {
+  background: #ffffff;
+  border-bottom: 2px solid var(--blue-100);
+  padding: 0.85rem 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(30, 64, 175, 0.05);
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.brand-logo-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+  flex-shrink: 0;
+}
+
+.brand-logo-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.app-title-group h1 {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--blue-950);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.app-title-group p {
+  font-size: 0.82rem;
+  color: var(--blue-600);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+/* Firm Switcher Capsule */
+.firm-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--blue-50);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--blue-200);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
+  max-width: 500px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.firm-toggle-group::-webkit-scrollbar {
+  display: none;
+}
+
+.firm-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border: none;
+  background: transparent;
+  color: var(--blue-900);
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.firm-btn:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.firm-btn.active.crafto {
+  background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(180, 83, 9, 0.35);
+}
+
+.firm-btn.active.as {
+  background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(30, 58, 138, 0.35);
+}
+
+.firm-logo-badge {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #ffffff;
+  padding: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Nav Tabs */
+.nav-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab-link {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-link:hover {
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+
+.tab-link.active {
+  background: var(--blue-600);
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* ==========================================================================
+   MAIN DASHBOARD WRAPPER & CARDS
+   ========================================================================== */
+.main-wrapper {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 1.75rem auto;
+  padding: 0 2rem;
+}
+
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: block;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  padding: 1.75rem;
+  margin-bottom: 1.75rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.card-header h2 {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--blue-950);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ==========================================================================
+   ACTIVE FIRM BANNER IN EDITOR
+   ========================================================================== */
+.firm-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.5rem;
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  border: 1px solid var(--blue-200);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.04);
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.firm-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: var(--blue-600);
+}
+
+.firm-banner.crafto-mode::before {
+  background: var(--crafto-primary);
+}
+
+.firm-banner.as-mode::before {
+  background: var(--as-primary);
+}
+
+.firm-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.firm-banner-logo {
+  height: 52px;
+  max-width: 150px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.firm-banner-info h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.firm-banner-info p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.firm-banner-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--blue-50);
+  color: var(--blue-800);
+  border: 1px solid var(--blue-100);
+}
+
+.badge-gst {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.badge-bank {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+/* ==========================================================================
+   INPUTS & CONTROLS IN BLUE THEME
+   ========================================================================== */
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-input, .form-select, .form-textarea {
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  background-color: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--blue-600);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 65px;
+}
+
+/* ==========================================================================
+   EDITOR ITEMS TABLE
+   ========================================================================== */
+.items-table-wrapper {
+  overflow-x: auto;
+  border: 1.5px solid var(--blue-100);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.editor-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.editor-table th {
+  background: var(--blue-50);
+  color: var(--blue-950);
+  font-weight: 800;
+  text-align: left;
+  padding: 0.75rem 0.85rem;
+  border-bottom: 2px solid var(--blue-200);
+  white-space: nowrap;
+}
+
+.editor-table td {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+}
+
+.editor-table tr:hover {
+  background-color: #fcfdfe;
+}
+
+.editor-table input {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.88rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s;
+}
+
+.editor-table input:focus {
+  border-color: var(--blue-600);
+  outline: none;
+}
+
+.btn-icon-delete {
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  border-radius: var(--radius-sm);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: bold;
+}
+
+.btn-icon-delete:hover {
+  background: #fca5a5;
+  color: #991b1b;
+}
+
+.table-action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+/* ==========================================================================
+   TOTALS & GST CALCULATION GRID (EDITOR)
+   ========================================================================== */
+.totals-section {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 2rem;
+  background: linear-gradient(135deg, #ffffff 0%, var(--blue-50) 100%);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--blue-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.amount-words-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.words-display {
+  background: #ffffff;
+  border: 1.5px dashed var(--blue-300);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  color: var(--blue-900);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.totals-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.totals-table td {
+  padding: 0.45rem 0.5rem;
+}
+
+.totals-table td.label-col {
+  color: var(--text-body);
+  font-weight: 600;
+}
+
+.totals-table td.val-col {
+  text-align: right;
+  font-weight: 700;
+  color: var(--blue-950);
+}
+
+.grand-total-row {
+  border-top: 2px solid var(--blue-700);
+  border-bottom: 2px solid var(--blue-700);
+}
+
+.grand-total-row td {
+  padding: 0.85rem 0.5rem !important;
+  font-weight: 900 !important;
+  font-size: 1.25rem !important;
+  color: var(--blue-800) !important;
+}
+
+/* ==========================================================================
+   BUTTONS (BLUE & WHITE SUITE)
+   ========================================================================== */
+.action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1.5px solid var(--border-light);
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-800) 100%);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+}
+
+.btn-crafto {
+  background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(180, 83, 9, 0.3);
+}
+
+.btn-crafto:hover {
+  background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+}
+
+.btn-whatsapp {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.btn-whatsapp:hover {
+  background: #15803d;
+}
+
+.btn-gmail {
+  background: linear-gradient(135deg, #ea4335 0%, #dc2626 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(234, 67, 53, 0.25);
+}
+
+.btn-gmail:hover {
+  background: #b91c1c;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--blue-900);
+  border: 1.5px solid var(--blue-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  background: var(--blue-50);
+  border-color: var(--blue-300);
+}
+
+/* ==========================================================================
+   DASHBOARD STATS CARDS
+   ========================================================================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--blue-100);
+  padding: 1.35rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, var(--blue-100) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.stat-title {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-val {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: var(--blue-950);
+  margin-top: 0.4rem;
+}
+
+.stat-sub {
+  font-size: 0.78rem;
+  color: var(--blue-600);
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   DATA TABLES (RECORDS & CLIENTS)
+   ========================================================================== */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table th {
+  background: var(--blue-50);
+  color: var(--blue-950);
+  font-weight: 800;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--blue-200);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-body);
+  vertical-align: middle;
+}
+
+.data-table tr:hover {
+  background-color: var(--blue-50);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+}
+
+.status-issued { background: var(--blue-100); color: var(--blue-800); }
+.status-paid { background: #dcfce7; color: #15803d; }
+.status-pending { background: #fef3c7; color: #b45309; }
+
+/* ==========================================================================
+   MODAL CONTAINER
+   ========================================================================== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  overflow-y: auto;
+  padding: 2.5rem 1rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  max-width: 890px;
+  width: 100%;
+  position: relative;
+  box-shadow: var(--shadow-xl);
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+}
+
+.modal-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.15rem 1.75rem;
+  background: var(--blue-950);
+  color: #ffffff;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.modal-close-btn:hover {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   🌟 ULTRA-PROFESSIONAL A4 GST TAX INVOICE FORMAT
+   EXECUTIVE CORPORATE GRADE WITH DUAL FIRM COLOR GRADING
+   ========================================================================== */
+
+.invoice-sheet {
+  background: #ffffff;
+  width: 100%;
+  max-width: 830px;
+  margin: 0 auto;
+  color: #0f172a;
+  font-size: 11px;
+  line-height: 1.45;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  position: relative;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Firm Color Grading Variables */
+.inv-grade-crafto {
+  --grade-primary: #b45309;          /* Warm Terracotta / Amber Bronze */
+  --grade-primary-dark: #78350f;
+  --grade-secondary: #fef3c7;        /* Soft Amber Cream */
+  --grade-subtle: #fffdfa;
+  --grade-border: #fcd34d;
+  --grade-text-accent: #92400e;
+}
+
+.inv-grade-as {
+  --grade-primary: #1e3a8a;          /* Deep Royal Navy */
+  --grade-primary-dark: #0f172a;
+  --grade-secondary: #dbeafe;        /* Ice Blue Tint */
+  --grade-subtle: #f8fafc;
+  --grade-border: #93c5fd;
+  --grade-text-accent: #1e40af;
+}
+
+/* Outer Top Color Bar */
+.inv-top-accent-bar {
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--grade-primary) 0%, var(--grade-primary-dark) 100%);
+}
+
+.inv-sheet-body {
+  padding: 20px 26px 16px 26px;
+}
+
+/* --- 1. HEADER SECTION --- */
+.inv-pro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--grade-secondary);
+}
+
+.inv-pro-brand {
+  max-width: 60%;
+}
+
+.inv-pro-logo {
+  max-height: 85px;
+  max-width: 280px;
+  object-fit: contain;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.inv-pro-firm-name {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--grade-primary-dark);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.inv-pro-firm-desc {
+  font-size: 10px;
+  color: #334155;
+  line-height: 1.45;
+  margin-top: 2px;
+}
+
+.inv-pro-meta-block {
+  text-align: right;
+  max-width: 45%;
+}
+
+.inv-pro-title-pill {
+  display: inline-block;
+  background: var(--grade-primary);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  padding: 4px 12px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.inv-pro-meta-table {
+  margin-left: auto;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+.inv-pro-meta-table td {
+  padding: 1.5px 5px;
+}
+
+.inv-pro-meta-table td.m-label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.inv-pro-meta-table td.m-val {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* --- 2. SUPPLIER & BUYER CARDS --- */
+.inv-parties-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.inv-party-card {
+  background: var(--grade-subtle);
+  border: 1px solid var(--grade-border);
+  border-radius: 6px;
+  padding: 7px 10px;
+}
+
+.inv-party-title {
+  font-size: 8.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--grade-text-accent);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inv-party-name {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.inv-party-detail {
+  font-size: 9.5px;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.inv-party-gstin {
+  display: inline-block;
+  background: #ffffff;
+  border: 1px solid var(--grade-border);
+  padding: 1.5px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+  color: var(--grade-primary-dark);
+  font-size: 9px;
+  margin-top: 3px;
+}
+
+/* --- 3. LINE ITEMS TABLE --- */
+.inv-table-frame {
+  border: 1px solid var(--grade-border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.inv-table-pro {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5px;
+}
+
+.inv-table-pro th {
+  background: var(--grade-primary);
+  color: #ffffff;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 5px 6px;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.inv-table-pro th:last-child {
+  border-right: none;
+}
+
+.inv-table-pro td {
+  padding: 4px 6px;
+  border-bottom: 1px solid #f1f5f9;
+  border-right: 1px solid #e2e8f0;
+  color: #1e293b;
+  vertical-align: middle;
+}
+
+.inv-table-pro td:last-child {
+  border-right: none;
+}
+
+.inv-table-pro tr:nth-child(even) td {
+  background-color: var(--grade-subtle);
+}
+
+/* Subtotal row */
+.inv-row-subtotal td {
+  background: var(--grade-secondary) !important;
+  color: var(--grade-primary-dark) !important;
+  font-weight: 800 !important;
+  border-top: 1.5px solid var(--grade-border) !important;
+  border-bottom: 1.5px solid var(--grade-border) !important;
+  padding: 4px 6px !important;
+}
+
+/* --- 4. SUMMARY & REMITTANCE SECTION (2-COLUMNS) --- */
+.inv-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* Left: Payment & Words Card */
+.inv-remittance-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.inv-bank-pill-card {
+  background: var(--grade-subtle);
+  border: 1px solid var(--grade-border);
+  border-radius: 6px;
+  padding: 7px 10px;
+}
+
+.inv-bank-title {
+  font-size: 8.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--grade-text-accent);
+  margin-bottom: 4px;
+}
+
+.inv-bank-grid {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  row-gap: 2px;
+  font-size: 9.5px;
+}
+
+.inv-bank-grid .b-label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.inv-bank-grid .b-val {
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+.inv-words-card {
+  background: #ffffff;
+  border-left: 3px solid var(--grade-primary);
+  background: var(--grade-subtle);
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  font-size: 9.5px;
+}
+
+.inv-words-title {
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.inv-words-text {
+  font-weight: 800;
+  color: var(--grade-primary-dark);
+  font-style: italic;
+  line-height: 1.35;
+}
+
+/* Right: Tax Breakdown Table */
+.inv-tax-box {
+  background: #ffffff;
+  border: 1px solid var(--grade-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.inv-tax-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5px;
+}
+
+.inv-tax-table td {
+  padding: 3.5px 10px;
+}
+
+.inv-tax-table td.tax-label {
+  color: #475569;
+  font-weight: 600;
+}
+
+.inv-tax-table td.tax-val {
+  text-align: right;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.inv-tax-table tr.tax-row {
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+/* High-Impact Grand Total Bar */
+.inv-tax-table tr.grand-row td {
+  background: var(--grade-primary) !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+}
+
+.inv-tax-table tr.grand-row td.tax-val {
+  color: #ffffff !important;
+  font-size: 13px !important;
+}
+
+/* --- 5. FOOTER & AUTHENTICATION --- */
+.inv-pro-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.inv-terms-block {
+  max-width: 58%;
+  font-size: 8px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.inv-terms-block strong {
+  color: #334155;
+}
+
+.inv-signatory-block {
+  text-align: right;
+  min-width: 160px;
+}
+
+.inv-signatory-for {
+  font-size: 9px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 22px;
+}
+
+.inv-signatory-line {
+  border-top: 1px solid #0f172a;
+  padding-top: 2px;
+  font-size: 8.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #0f172a;
+}
+
+.inv-disclaimer-tag {
+  text-align: center;
+  font-size: 7.5px;
+  color: #94a3b8;
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   PRINT / PDF MEDIA QUERY FOR EXACT SINGLE-PAGE A4 OUTPUT
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 5mm 6mm !important;
+  }
+
+  html, body {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .modal-overlay, .modal-content {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border: none !important;
+  }
+
+  .modal-header-bar, .top-navbar, .action-bar, .modal-close-btn, .nav-tabs, .btn, .toast-msg {
+    display: none !important;
+  }
+
+  #printable-invoice, #printable-invoice * {
+    visibility: visible;
+  }
+
+  #printable-invoice {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .inv-sheet-body {
+    padding: 8px 12px !important;
+  }
+
+  .inv-pro-header {
+    margin-bottom: 8px !important;
+    padding-bottom: 6px !important;
+  }
+
+  .inv-pro-logo {
+    max-height: 75px !important;
+    max-width: 260px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .inv-parties-grid {
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .inv-party-card {
+    padding: 4px 8px !important;
+  }
+
+  .inv-table-frame {
+    margin-bottom: 8px !important;
+  }
+
+  .inv-table-pro th {
+    padding: 4px 5px !important;
+  }
+
+  .inv-table-pro td {
+    padding: 2.5px 5px !important;
+  }
+
+  .inv-bottom-grid {
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .inv-bank-pill-card {
+    padding: 4px 8px !important;
+  }
+
+  .inv-words-card {
+    padding: 4px 8px !important;
+  }
+
+  .inv-tax-table td {
+    padding: 2px 5px !important;
+  }
+
+  .inv-pro-footer {
+    padding-top: 5px !important;
+  }
+
+  .inv-signatory-for {
+    margin-bottom: 16px !important;
+  }
+}
+
+/* TOAST NOTIFICATION */
+.toast-msg {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--blue-950);
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-left: 4px solid var(--blue-500);
+}
+
+.toast-msg.show {
+  transform: translateY(0);
+  opacity: 1;
+}

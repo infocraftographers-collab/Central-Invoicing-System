@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central Invoicing System | GST Record Keeping & Billing</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Blue & White Navigation & Dynamic Firm Switcher -->
+  <header class="top-navbar">
+    <div class="brand-section">
+      <!-- High-End Logical SVG Logo for Central Invoicing System -->
+      <div class="brand-logo-icon">
+        <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="12" fill="url(#navyGrad)"/>
+          <!-- Folded Invoice Document -->
+          <path d="M13 10C13 8.89543 13.8954 8 15 8H26L34 16V38C34 39.1046 33.1046 40 32 40H15C13.8954 40 13 39.1046 13 38V10Z" fill="#FFFFFF"/>
+          <path d="M26 8V16H34L26 8Z" fill="#93C5FD"/>
+          <!-- Verified GST Indian Rupee Seal -->
+          <circle cx="28" cy="31" r="7.5" fill="#2563EB" stroke="#FFFFFF" stroke-width="2"/>
+          <path d="M25 28.8H31M25 30.5H31M27 28.8C27.5 30.5 28.6 31.5 29.8 33.2" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Ledger Lines -->
+          <rect x="17" y="16" width="6" height="2.2" rx="1" fill="#64748B"/>
+          <rect x="17" y="21" width="13" height="2.2" rx="1" fill="#94A3B8"/>
+          <rect x="17" y="26" width="7" height="2.2" rx="1" fill="#CBD5E1"/>
+          <defs>
+            <linearGradient id="navyGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#1E3A8A"/>
+              <stop offset="1" stop-color="#2563EB"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- Exact Title & Subtitle Requested -->
+      <div class="app-title-group">
+        <h1>Central Invoicing System</h1>
+        <p>GST Record Keeping & Billing</p>
+      </div>
+
+      <!-- Dynamic Switcher for Any Number of Firms -->
+      <div id="firm-switcher-container" class="firm-toggle-group">
+        <!-- Dynamically populated from state.firms -->
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-link active" onclick="switchTab('editor-view')">
+        <span>✍️</span> New Invoice
+      </button>
+      <button class="tab-link" onclick="switchTab('records-view')">
+        <span>📑</span> Billing Records
+      </button>
+      <button class="tab-link" onclick="switchTab('clients-view')">
+        <span>👥</span> Clients Directory
+      </button>
+      <button class="tab-link" onclick="switchTab('settings-view')">
+        <span>⚙️</span> Firm Profiles & Settings
+      </button>
+    </nav>
+  </header>
+
+  <main class="main-wrapper">
+
+    <!-- ========================================================= -->
+    <!-- VIEW 1: INVOICE EDITOR / CREATION -->
+    <!-- ========================================================= -->
+    <section id="editor-view" class="view-section active">
+      
+      <!-- Selected Firm Profile Banner -->
+      <div class="firm-banner crafto-mode" id="firm-banner-card">
+        <div class="firm-banner-left">
+          <img id="active-firm-logo" src="/assets/craftographers_logo.png" alt="Firm Logo" class="firm-banner-logo">
+          <div class="firm-banner-info">
+            <h3 id="active-firm-name">Craftographers</h3>
+            <p id="active-firm-address">66A/67A Adinath Nager, Pal Road, Jodhpur- 342008</p>
+            <div class="firm-banner-tags">
+              <span class="badge badge-gst" id="active-firm-gstin">GSTIN: 08GFFPS1076L1ZV</span>
+              <span class="badge badge-bank" id="active-firm-bank">HDFC Bank A/C: 50200050618222 (IFSC: HDFC0000142)</span>
+              <span class="badge" id="active-firm-email">info.craftographers@gmail.com</span>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-secondary" style="font-size: 0.82rem; padding: 6px 14px;" onclick="switchTab('settings-view')">
+            ⚙️ Firm Settings
+          </button>
+          <button class="btn btn-secondary" style="font-size: 0.82rem; padding: 6px 14px;" onclick="showAddFirmModal()">
+            ➕ Add Firm
+          </button>
+        </div>
+      </div>
+
+      <!-- Invoice Form Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2><span>📄</span> Tax Invoice Details</h2>
+          <span style="font-size: 0.85rem; color: #64748b; font-weight: 500;">
+            GST Rule 46 Compliant • Auto-Prefixed Bill Number
+          </span>
+        </div>
+
+        <!-- Form Top: Invoice Number & Client Information -->
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label for="inv-firm-select">🏢 Billing Firm</label>
+            <select id="inv-firm-select" class="form-select" onchange="onFirmSelectChanged(this.value)">
+              <!-- Dynamically populated from state.firms -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="inv-number-input">🔢 Firm Bill No. (Auto-Prefixed) *</label>
+            <input type="text" id="inv-number-input" class="form-input" placeholder="e.g. CRF-12 or ASE-21">
+          </div>
+
+          <div class="form-group">
+            <label for="inv-date-input">📅 Invoice Date (DD/MM/YYYY) *</label>
+            <input type="text" id="inv-date-input" class="form-input" placeholder="13/11/2026">
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="inv-client-preset">⚡ Quick Select Existing Client</label>
+            <select id="inv-client-preset" class="form-select" onchange="onSelectExistingClient(this.value)">
+              <option value="">-- Choose saved client or enter below --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="inv-tax-type">⚖️ Tax Bifurcation Mode</label>
+            <select id="inv-tax-type" class="form-select" onchange="onTaxTypeChanged(this.value)">
+              <option value="intra" selected>Intra-State (CGST + SGST: 9% + 9%)</option>
+              <option value="inter">Inter-State (IGST: 18%)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2" style="margin-top: 0.5rem;">
+          <!-- Billed To -->
+          <div style="background: var(--blue-50); padding: 1.15rem; border-radius: var(--radius-md); border: 1.5px solid var(--blue-100);">
+            <h4 style="font-size: 0.92rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--blue-950);">
+              👤 Billed To (Client / Buyer Details)
+            </h4>
+            <div class="form-group">
+              <label for="inv-client-name">Client / Consignee Name *</label>
+              <input type="text" id="inv-client-name" class="form-input" placeholder="e.g. The Commandant 224 ABOD C/O 56 APO">
+            </div>
+            <div class="form-group">
+              <label for="inv-client-gstin">Client GSTIN</label>
+              <input type="text" id="inv-client-gstin" class="form-input" placeholder="Leave blank if unregistered / Government">
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="inv-client-phone">Phone / WhatsApp</label>
+                <input type="tel" id="inv-client-phone" class="form-input" placeholder="e.g. 9829012345">
+              </div>
+              <div class="form-group">
+                <label for="inv-client-email">Client Email</label>
+                <input type="email" id="inv-client-email" class="form-input" placeholder="client@example.com">
+              </div>
+            </div>
+          </div>
+
+          <!-- Ship To -->
+          <div style="background: var(--blue-50); padding: 1.15rem; border-radius: var(--radius-md); border: 1.5px solid var(--blue-100);">
+            <h4 style="font-size: 0.92rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--blue-950);">
+              🚚 Ship To & Order Reference
+            </h4>
+            <div class="form-group">
+              <label for="inv-ship-to">Shipping Address / Depot (optional)</label>
+              <textarea id="inv-ship-to" class="form-textarea" placeholder="Leave blank if same as Billed To address"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="inv-notes">Work Order / GEM Order Ref</label>
+              <input type="text" id="inv-notes" class="form-input" placeholder="e.g. GEMC-5116877... / PO Reference">
+            </div>
+          </div>
+        </div>
+
+        <!-- ITEMS TABLE -->
+        <h3 style="font-size: 1.05rem; font-weight: 800; margin: 1.75rem 0 0.65rem 0; color: var(--blue-950); display: flex; align-items: center; justify-content: space-between;">
+          <span>📦 Line Items (Products / Services)</span>
+          <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Tab key navigates fields quickly</span>
+        </h3>
+
+        <div class="items-table-wrapper">
+          <table class="editor-table" id="editor-items-table">
+            <thead>
+              <tr>
+                <th style="width: 55px; text-align: center;">S.NO.</th>
+                <th>ITEM DESCRIPTION</th>
+                <th style="width: 120px;">HSN / SAC</th>
+                <th style="width: 95px; text-align: right;">QTY</th>
+                <th style="width: 140px; text-align: right;">UNIT PRICE (₹)</th>
+                <th style="width: 150px; text-align: right;">TOTAL PRICE (₹)</th>
+                <th style="width: 60px; text-align: center;">ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="editor-items-tbody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-action-row">
+          <button type="button" class="btn btn-secondary" onclick="addNewItemRow()">
+            <span>➕</span> Add Item Row
+          </button>
+        </div>
+
+        <!-- TOTALS & TAX ENGINE -->
+        <div class="totals-section">
+          <!-- Left: Amount in Words -->
+          <div class="amount-words-box">
+            <div>
+              <label style="font-size: 0.85rem; font-weight: 800; color: var(--blue-950); margin-bottom: 6px; display: block;">
+                🗣️ Total Amount (in words)
+              </label>
+              <div id="words-preview-text" class="words-display">
+                Zero Rupees Only
+              </div>
+            </div>
+
+            <div style="margin-top: 1.25rem; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; background: #ffffff; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--blue-100);">
+              <strong>GST Notice:</strong> Intra-State bills split evenly into CGST & SGST (9% + 9%). Inter-State bills apply IGST (18%) in accordance with GST Rule 46.
+            </div>
+          </div>
+
+          <!-- Right: Tax Calculations Table -->
+          <div>
+            <table class="totals-table">
+              <tr>
+                <td class="label-col">Sub Total (Taxable):</td>
+                <td class="val-col" id="calc-subtotal">₹ 0.00</td>
+              </tr>
+              <tr id="row-cgst">
+                <td class="label-col">
+                  CGST: 
+                  <input type="number" id="tax-cgst-rate" value="9" step="0.5" style="width: 55px; padding: 3px 5px; font-weight: 700; text-align: center;" oninput="recalculateTotals()"> %
+                </td>
+                <td class="val-col" id="calc-cgst">₹ 0.00</td>
+              </tr>
+              <tr id="row-sgst">
+                <td class="label-col">
+                  SGST: 
+                  <input type="number" id="tax-sgst-rate" value="9" step="0.5" style="width: 55px; padding: 3px 5px; font-weight: 700; text-align: center;" oninput="recalculateTotals()"> %
+                </td>
+                <td class="val-col" id="calc-sgst">₹ 0.00</td>
+              </tr>
+              <tr id="row-igst" style="display: none;">
+                <td class="label-col">
+                  IGST: 
+                  <input type="number" id="tax-igst-rate" value="18" step="0.5" style="width: 55px; padding: 3px 5px; font-weight: 700; text-align: center;" oninput="recalculateTotals()"> %
+                </td>
+                <td class="val-col" id="calc-igst">₹ 0.00</td>
+              </tr>
+              <tr>
+                <td class="label-col">Round Off:</td>
+                <td class="val-col">
+                  <input type="number" id="tax-roundoff" value="0.00" step="0.01" style="width: 85px; text-align: right; padding: 3px 5px; font-weight: 700;" oninput="onRoundOffManualChange()">
+                </td>
+              </tr>
+              <tr class="grand-total-row">
+                <td class="label-col">Grand Total:</td>
+                <td class="val-col" id="calc-grandtotal">₹ 0.00</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-bar">
+          <button type="button" class="btn btn-secondary" onclick="resetEditorForm()">
+            <span>🔄</span> New / Reset
+          </button>
+          
+          <button type="button" class="btn btn-secondary" onclick="previewAndPrintCurrentInvoice()">
+            <span>🖨️</span> Print / Save PDF
+          </button>
+
+          <button type="button" class="btn btn-whatsapp" onclick="shareOnWhatsAppCurrent()">
+            <span>💬</span> Share on WhatsApp
+          </button>
+
+          <button type="button" class="btn btn-gmail" onclick="shareViaGmailCurrent()">
+            <span>✉️</span> Email via Gmail
+          </button>
+
+          <button type="button" id="btn-save-invoice" class="btn btn-crafto" onclick="saveCurrentInvoice()">
+            <span>💾</span> Save Invoice Record
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 2: BILLING RECORDS & HISTORY -->
+    <!-- ========================================================= -->
+    <section id="records-view" class="view-section">
+      <!-- Live Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Total Invoices</div>
+          <div class="stat-val" id="stat-total-invoices">0</div>
+          <div class="stat-sub">Across all firms</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Total Revenue</div>
+          <div class="stat-val" id="stat-total-revenue">₹ 0</div>
+          <div class="stat-sub">Grand Total billed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Total CGST + SGST</div>
+          <div class="stat-val" id="stat-total-cgst-sgst">₹ 0</div>
+          <div class="stat-sub">Intra-State tax collected</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Total IGST</div>
+          <div class="stat-val" id="stat-total-igst">₹ 0</div>
+          <div class="stat-sub">Inter-State tax collected</div>
+        </div>
+      </div>
+
+      <!-- Filters & Export Toolbar -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <select id="records-firm-filter" class="form-select" onchange="loadInvoicesList()" style="width: 220px;">
+              <option value="all">🏢 All Firms</option>
+              <!-- Populated dynamically -->
+            </select>
+            <input type="text" id="records-search-input" class="form-input" placeholder="🔍 Search by Invoice # or Client..." oninput="filterInvoicesLocally()" style="width: 300px;">
+          </div>
+
+          <div style="display: flex; gap: 0.75rem;">
+            <a href="/api/export/csv" class="btn btn-secondary" download="invoices_export.csv">
+              <span>📥</span> Export to Google Sheets (CSV)
+            </a>
+            <button class="btn btn-primary" onclick="switchTab('editor-view')">
+              <span>➕</span> Create Invoice
+            </button>
+          </div>
+        </div>
+
+        <!-- Invoices Data Table -->
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Firm</th>
+                <th>Date</th>
+                <th>Client Name</th>
+                <th style="text-align: right;">Sub Total (₹)</th>
+                <th style="text-align: right;">CGST (₹)</th>
+                <th style="text-align: right;">SGST (₹)</th>
+                <th style="text-align: right;">IGST (₹)</th>
+                <th style="text-align: right;">Grand Total (₹)</th>
+                <th>Status</th>
+                <th style="text-align: center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="invoices-table-tbody">
+              <!-- Dynamically populated from API -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 3: CLIENTS DIRECTORY -->
+    <!-- ========================================================= -->
+    <section id="clients-view" class="view-section">
+      <div class="card">
+        <div class="card-header">
+          <h2><span>👥</span> Client Directory</h2>
+          <button class="btn btn-secondary" onclick="showAddClientPrompt()"><span>➕</span> Add New Client</button>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Clients are automatically recorded here whenever an invoice is created, or you can manage them manually.
+        </p>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Client Name</th>
+                <th>Address</th>
+                <th>GSTIN</th>
+                <th>Phone (WhatsApp)</th>
+                <th>Email</th>
+                <th style="text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="clients-table-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 4: FIRM PROFILES & SETTINGS -->
+    <!-- ========================================================= -->
+    <section id="settings-view" class="view-section">
+      
+      <!-- Top Actions Bar for Firms -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2><span>🏢</span> Registered Firms Management</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+              Manage business profiles, GSTIN, addresses, bank accounts, and bill prefixes for each firm.
+            </p>
+          </div>
+          <button class="btn btn-primary" onclick="toggleNewFirmForm()">
+            <span>➕</span> Add New Firm
+          </button>
+        </div>
+
+        <!-- Collapsible "Add New Firm" Form -->
+        <div id="new-firm-card" style="display: none; background: var(--blue-50); border: 2px dashed var(--blue-500); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="color: var(--blue-950); font-weight: 800; font-size: 1.1rem;">➕ Register a New Firm</h3>
+            <button type="button" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="toggleNewFirmForm()">Close ✕</button>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>Firm Name *</label>
+              <input type="text" id="new-firm-name" class="form-input" placeholder="e.g. Skyline Logistics">
+            </div>
+            <div class="form-group">
+              <label>Bill Prefix *</label>
+              <input type="text" id="new-firm-prefix" class="form-input" placeholder="e.g. SKY-">
+            </div>
+            <div class="form-group">
+              <label>Starting Bill Counter</label>
+              <input type="number" id="new-firm-nextno" class="form-input" value="1">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Registered Address *</label>
+            <input type="text" id="new-firm-address" class="form-input" placeholder="e.g. Plot No 45, Phase 2, Industrial Area, Jodhpur">
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label>GSTIN</label>
+              <input type="text" id="new-firm-gstin" class="form-input" placeholder="e.g. 08AAAAA0000A1Z5">
+            </div>
+            <div class="form-group">
+              <label>Billing Gmail / Email</label>
+              <input type="email" id="new-firm-email" class="form-input" placeholder="accounts@example.com">
+            </div>
+            <div class="form-group">
+              <label>Phone / WhatsApp</label>
+              <input type="tel" id="new-firm-phone" class="form-input" placeholder="e.g. 9829012345">
+            </div>
+          </div>
+
+          <div style="background: #ffffff; padding: 1rem; border-radius: var(--radius-sm); border: 1.5px solid var(--blue-200); margin: 1rem 0;">
+            <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--blue-950); margin-bottom: 0.5rem;">🏦 Bank Details for Remittance</h4>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label>Bank Name</label>
+                <input type="text" id="new-firm-bank" class="form-input" placeholder="e.g. HDFC Bank">
+              </div>
+              <div class="form-group">
+                <label>Account Holder Name</label>
+                <input type="text" id="new-firm-accname" class="form-input" placeholder="Firm Account Name">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label>Account Number</label>
+                <input type="text" id="new-firm-accno" class="form-input" placeholder="Account Number">
+              </div>
+              <div class="form-group">
+                <label>IFSC Code</label>
+                <input type="text" id="new-firm-ifsc" class="form-input" placeholder="e.g. HDFC0000142">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Brand Theme Color</label>
+              <select id="new-firm-color" class="form-select">
+                <option value="#1e3a8a">Royal Navy Blue</option>
+                <option value="#b45309">Warm Terracotta Bronze</option>
+                <option value="#047857">Emerald Green</option>
+                <option value="#7e22ce">Royal Purple</option>
+                <option value="#be123c">Burgundy Wine</option>
+                <option value="#0f172a">Midnight Charcoal</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Logo Asset URL (Optional)</label>
+              <input type="text" id="new-firm-logo" class="form-input" placeholder="Defaults to brand logo">
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="margin-top: 0.5rem;" onclick="createNewFirm()">
+            <span>💾</span> Save & Register Firm
+          </button>
+        </div>
+
+        <!-- DYNAMIC FIRMS CARDS CONTAINER -->
+        <div id="firms-cards-container" class="form-grid-2">
+          <!-- Dynamically populated from state.firms -->
+        </div>
+      </div>
+
+      <!-- Google Sheets Sync Guide & Webhook -->
+      <div class="card">
+        <div class="card-header">
+          <h2><span>📊</span> Google Sheets Real-Time Sync</h2>
+          <span class="badge" style="background: var(--blue-100); color: var(--blue-800);">Automated & 100% Free</span>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-body); line-height: 1.6; margin-bottom: 1.25rem;">
+          You can keep your Google Sheets updated in two ways:
+          <br>1. <strong>Instant CSV Export:</strong> Click <a href="/api/export/csv" style="color: var(--blue-600); font-weight: 700;">Download CSV</a> anytime to open or import all records into Google Sheets.
+          <br>2. <strong>Real-time Auto Sync:</strong> Enter your Google Apps Script Webhook URL below to automatically append a new row into your Google Sheet every time staff saves an invoice!
+        </p>
+
+        <div class="form-group" style="max-width: 650px;">
+          <label for="setting-sheets-webhook">Google Apps Script Webhook URL</label>
+          <input type="url" id="setting-sheets-webhook" class="form-input" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+
+        <button class="btn btn-primary" onclick="saveSettings()">Save Webhook Settings</button>
+
+        <!-- Accordion with instructions -->
+        <details style="margin-top: 1.5rem; background: var(--blue-50); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--blue-200); font-size: 0.88rem;">
+          <summary style="font-weight: 700; cursor: pointer; color: var(--blue-950);">
+            📋 Click to see 1-minute Google Sheets Webhook Setup Instructions
+          </summary>
+          <div style="margin-top: 0.85rem; line-height: 1.6; color: var(--text-body);">
+            1. Open your Google Sheet in your browser.<br>
+            2. Go to <strong>Extensions ➔ Apps Script</strong>.<br>
+            3. Paste this simple 8-line script:<br>
+            <pre style="background: #0f172a; color: #f8fafc; padding: 12px; border-radius: 6px; margin: 8px 0; overflow-x: auto; font-size: 0.82rem;">
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([
+    new Date(), data.firm_id, data.invoice_no, data.invoice_date,
+    data.client_name, data.client_gstin, data.sub_total_price,
+    data.cgst_amount, data.sgst_amount, data.igst_amount,
+    data.round_off, data.grand_total, data.status
+  ]);
+  return ContentService.createTextOutput(JSON.stringify({"result": "success"})).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+            4. Click <strong>Deploy ➔ New Deployment</strong>, select <strong>Web App</strong>, set <em>Who has access</em> to <strong>Anyone</strong>, and copy the Web App URL into the box above!
+          </div>
+        </details>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================== -->
+  <!-- 🌟 MODAL: ULTRA-PROFESSIONAL A4 GST TAX INVOICE FORMAT                    -->
+  <!-- ========================================================================== -->
+  <div id="print-modal" class="modal-overlay">
+    <div class="modal-content">
+      
+      <div class="modal-header-bar">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">🖨️</span>
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff;" id="modal-bill-title">Executive GST Invoice Preview</h3>
+        </div>
+        <div style="display: flex; gap: 0.65rem;">
+          <button class="btn btn-primary" style="padding: 6px 14px; font-size: 0.85rem;" onclick="triggerBrowserPrint()">
+            <span>🖨️</span> Print / Save as PDF
+          </button>
+          <button class="modal-close-btn" onclick="closePrintModal()">&times;</button>
+        </div>
+      </div>
+
+      <div style="padding: 1.75rem; background: #e2e8f0; overflow-x: auto;">
+        
+        <!-- The Printable A4 Sheet -->
+        <div id="printable-invoice" class="invoice-sheet inv-grade-crafto">
+          <!-- Top Accent Color Bar -->
+          <div class="inv-top-accent-bar"></div>
+
+          <div class="inv-sheet-body">
+            
+            <!-- 1. HEADER SECTION -->
+            <div class="inv-pro-header">
+              <!-- Left Brand: Prominent & Enlarged Logo -->
+              <div class="inv-pro-brand">
+                <img id="print-logo" src="/assets/craftographers_logo.png" alt="Firm Logo" class="inv-pro-logo">
+                <div id="print-firm-name" class="inv-pro-firm-name">Craftographers</div>
+                <div id="print-firm-address" class="inv-pro-firm-desc">66A/67A Adinath Nager, Pal Road, Jodhpur- 342008</div>
+                <div class="inv-pro-firm-desc">Email: <span id="print-firm-email">info.craftographers@gmail.com</span></div>
+                <div class="inv-pro-firm-desc" style="font-weight: 700; color: #0f172a;">GSTIN: <span id="print-firm-gstin">08GFFPS1076L1ZV</span></div>
+              </div>
+
+              <!-- Right Title & Meta (Reverse Charge & Place of Supply REMOVED) -->
+              <div class="inv-pro-meta-block">
+                <div class="inv-pro-title-pill">TAX INVOICE</div>
+                <table class="inv-pro-meta-table">
+                  <tr>
+                    <td class="m-label">Invoice No:</td>
+                    <td class="m-val" id="print-inv-no">CRF-11</td>
+                  </tr>
+                  <tr>
+                    <td class="m-label">Invoice Date:</td>
+                    <td class="m-val" id="print-inv-date">10/11/2026</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- 2. SUPPLIER & BUYER PARTIES GRID -->
+            <div class="inv-parties-grid">
+              <!-- Buyer / Billed To -->
+              <div class="inv-party-card">
+                <div class="inv-party-title">
+                  <span>BILLED TO (BUYER DETAILS)</span>
+                  <span>RECEIVER</span>
+                </div>
+                <div class="inv-party-name" id="print-client-name">The Commandant 224 ABOD C/O 56 APO</div>
+                <div class="inv-party-detail" id="print-client-address">224 ABOD C/O 56 APO</div>
+                <div id="print-client-gstin-box" style="margin-top: 4px;">
+                  <span class="inv-party-gstin">GSTIN: <span id="print-client-gstin">UNREGISTERED / GOVT</span></span>
+                </div>
+              </div>
+
+              <!-- Ship To -->
+              <div class="inv-party-card">
+                <div class="inv-party-title">
+                  <span>SHIPPED TO (CONSIGNEE)</span>
+                  <span>DESTINATION</span>
+                </div>
+                <div class="inv-party-name" id="print-ship-name">Same as Billed To</div>
+                <div class="inv-party-detail" id="print-ship-to">224 ABOD C/O 56 APO</div>
+                <div class="inv-party-detail" style="margin-top: 4px;">
+                  <strong>PO / Ref:</strong> <span id="print-inv-notes">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. LINE ITEMS TABLE -->
+            <div class="inv-table-frame">
+              <table class="inv-table-pro">
+                <thead>
+                  <tr>
+                    <th style="width: 45px; text-align: center;">S.NO</th>
+                    <th style="text-align: left; padding-left: 10px;">DESCRIPTION OF GOODS / SERVICES</th>
+                    <th style="width: 80px; text-align: center;">HSN / SAC</th>
+                    <th style="width: 60px; text-align: center;">QTY</th>
+                    <th style="width: 105px; text-align: right;">UNIT PRICE (₹)</th>
+                    <th style="width: 120px; text-align: right; padding-right: 10px;">TOTAL (₹)</th>
+                  </tr>
+                </thead>
+                <tbody id="print-items-tbody">
+                  <!-- Dynamically populated item rows -->
+                </tbody>
+                <tfoot>
+                  <!-- Sub Total Row -->
+                  <tr class="inv-row-subtotal">
+                    <td colspan="3" style="text-align: right; padding-right: 12px; font-weight: 800;">SUB TOTAL (TAXABLE VALUE)</td>
+                    <td class="text-center" id="print-total-qty" style="font-weight: 800;">75</td>
+                    <td class="text-right" id="print-total-unitprice" style="font-weight: 800;">120210.16</td>
+                    <td class="text-right" id="print-subtotal-val" style="font-weight: 800; padding-right: 10px;">9015762.72</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <!-- 4. BOTTOM 2-COLUMN GRID: PAYMENT & TAX CALCULATION -->
+            <div class="inv-bottom-grid">
+              
+              <!-- Left: Bank Details & Words -->
+              <div class="inv-remittance-card">
+                <!-- Bank Pill Card -->
+                <div class="inv-bank-pill-card">
+                  <div class="inv-bank-title">💳 BANK REMITTANCE DETAILS (DIRECT ACCOUNT TRANSFER)</div>
+                  <div class="inv-bank-grid">
+                    <span class="b-label">Bank Name:</span>
+                    <span class="b-val" id="print-bank-name">HDFC Bank</span>
+
+                    <span class="b-label">A/C Name:</span>
+                    <span class="b-val" id="print-bank-accname">Craftographers</span>
+
+                    <span class="b-label">Account No:</span>
+                    <span class="b-val" style="font-size: 11px; letter-spacing: 0.05em;" id="print-bank-accno">50200050618222</span>
+
+                    <span class="b-label">IFSC Code:</span>
+                    <span class="b-val" id="print-bank-ifsc">HDFC0000142</span>
+                  </div>
+                </div>
+
+                <!-- Amount in Words -->
+                <div class="inv-words-card">
+                  <div class="inv-words-title">TOTAL AMOUNT IN WORDS</div>
+                  <div class="inv-words-text" id="print-amount-words">
+                    One Crore Six Lakh Thirty-Eight Thousand Six Hundred Rupees Only.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Tax Breakdown Summary -->
+              <div class="inv-tax-box">
+                <table class="inv-tax-table">
+                  <tr class="tax-row">
+                    <td class="tax-label">Taxable Amount:</td>
+                    <td class="tax-val" id="print-taxable-val">₹ 90,15,762.72</td>
+                  </tr>
+                  <tr class="tax-row" id="print-row-cgst">
+                    <td class="tax-label">CGST (<span id="print-cgst-rate">9.00%</span>):</td>
+                    <td class="tax-val" id="print-cgst-val">₹ 8,11,418.64</td>
+                  </tr>
+                  <tr class="tax-row" id="print-row-sgst">
+                    <td class="tax-label">SGST (<span id="print-sgst-rate">9.00%</span>):</td>
+                    <td class="tax-val" id="print-sgst-val">₹ 8,11,418.64</td>
+                  </tr>
+                  <tr class="tax-row" id="print-row-igst" style="display: none;">
+                    <td class="tax-label">IGST (<span id="print-igst-rate">18.00%</span>):</td>
+                    <td class="tax-val" id="print-igst-val">₹ 0.00</td>
+                  </tr>
+                  <tr class="tax-row">
+                    <td class="tax-label">Round Off:</td>
+                    <td class="tax-val" id="print-roundoff-val">₹ 0.00</td>
+                  </tr>
+                  <tr class="grand-row">
+                    <td class="tax-label">GRAND TOTAL:</td>
+                    <td class="tax-val" id="print-grandtotal-val">₹ 1,06,38,600</td>
+                  </tr>
+                </table>
+              </div>
+
+            </div>
+
+            <!-- 5. FOOTER & AUTHENTICATION -->
+            <div class="inv-pro-footer">
+              <div class="inv-terms-block">
+                <strong>Terms & Conditions:</strong><br>
+                1. Goods once sold will not be taken back.<br>
+                2. Payments due within terms of work order/contract.<br>
+                3. Subject to jurisdiction only.
+              </div>
+
+              <div class="inv-signatory-block">
+                <div class="inv-signatory-for">For <span id="print-sign-firm">Craftographers</span></div>
+                <div class="inv-signatory-line">Authorized Signatory</div>
+              </div>
+            </div>
+
+            <div class="inv-disclaimer-tag">
+              This is a computer generated invoice and does not require physical signature
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="app-toast" class="toast-msg">
+    <span id="toast-icon">✅</span>
+    <span id="toast-text">Success message</span>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
