@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Central Invoicing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="sheet.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d2b3a'/%3E%3Cpath d='M10 7h9l4 4v14H10z' fill='%23fff'/%3E%3Cpath d='M13 14h7M13 18h7M13 22h4' stroke='%231d2b3a' stroke-width='1.6'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Sign in -->
+  <main id="login" class="login" hidden>
+    <form id="login-form" class="login-card" autocomplete="on">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <h1>Central Invoicing</h1>
+      <p class="login-sub">GST invoices for the team, recorded in Google Sheets.</p>
+      <div id="login-setup" class="notice warn" hidden>
+        This site is not connected to a Google Sheet yet. Paste the Apps Script web app URL into <code>config.js</code> (see DEPLOY.md).
+      </div>
+      <label class="field"><span>Username</span>
+        <input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label class="field"><span>PIN</span>
+        <input name="pin" type="password" autocomplete="current-password" required></label>
+      <p id="login-error" class="form-error" role="alert" hidden></p>
+      <button class="btn primary block" type="submit">Sign in</button>
+    </form>
+  </main>
+
+  <!-- App -->
+  <div id="app" hidden>
+    <header class="topbar">
+      <a class="brand" href="#new"><span class="brand-mark" aria-hidden="true"></span><span>Central Invoicing</span></a>
+      <nav id="nav" class="nav" aria-label="Main"></nav>
+      <div class="user">
+        <button id="user-btn" class="user-btn" type="button" aria-haspopup="true" aria-expanded="false"></button>
+        <div id="user-menu" class="menu" hidden></div>
+      </div>
+    </header>
+    <div id="loading" class="loading" hidden><span class="spinner"></span> Loading from Google Sheets…</div>
+    <main id="view" class="view"></main>
+  </div>
+
+  <div id="dialogs"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="print-root" aria-hidden="true"></div>
+
+  <script src="config.js"></script>
+  <script src="sheet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
