@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<!-- Print check: /dev/print-test.html?n=40 renders an invoice with n items exactly as the app prints it. -->
+<html><head><meta charset="UTF-8"><title>print test</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/sheet.css"></head>
+<body><p>screen-only text that must not print</p><div id="print-root"></div>
+<script src="/sheet.js"></script>
+<script>
+  var n = Number(new URLSearchParams(location.search).get('n') || 10), items = [];
+  for (var i = 0; i < n; i++) items.push({ item: 'LV7/TATA-2641-7520-0112BASSY RELEASE CABLE COMP. CENTRE FLAP ' + (i + 1), hsn: '8708', qty: 10 + i, unit_price: 320.34 + i });
+  var d = { items: items, tax_type: 'intra', cgst_rate: 9, sgst_rate: 9 };
+  var inv = Object.assign({ invoice_no: 'ASE-21', invoice_date: '14/11/2026', client_name: 'The Commandant 224 ABOD C/O 56 APO', client_address: '224 ABOD C/O 56 APO', notes: 'GEMC-511687712345' }, Sheet.compute(d));
+  var firm = { name: 'A S ENTERPRISES', address: '66A/67A Adinath Nager, Pal Road, Jodhpur- 342008', email: 'gem.asenterprises94@gmail.com', gstin: '08TFCPS8191N1Z3',
+    bank_name: 'HDFC Bank', account_name: 'AS Enterprises', account_no: '50200106872092', ifsc_code: 'HDFC0000142', logo_url: 'assets/as_enterprises_logo.jpg', theme_color: '#1E3A8A' };
+  var root = document.getElementById('print-root');
+  root.innerHTML = Sheet.html(inv, firm);
+  root.querySelector('img').src = '/assets/as_enterprises_logo.jpg';
+  document.fonts.ready.then(function () { document.title = 'scale=' + Sheet.fit(root.firstElementChild); });
+</script></body></html>
